@@ -1,21 +1,4 @@
-exports.get = (req,res)=>{
-    req.getConnection((err,conn)=>{
-        if (err) return res.send(err);
 
-
-        conn.query(`SELECT 
-        Nombre,
-        COUNT(*) AS TotalRegistros
-        FROM empleado
-        INNER JOI`, (err,result)=>{
-            if (err) return res.send(err);
-            res.send(result);
-
-        })
-    }
-  
-    )
-}
 
 exports.getResultado = (req,res)=>{
     req.getConnection((err,conn)=>{
