@@ -6,17 +6,18 @@ exports.getResultado = (req,res)=>{
 
 
         conn.query(`     SELECT 
+        SELECT 
         B.Nombre,
-        C.clave,
+        C.descripcion,
+        D.clave,
         COUNT(*) AS Cantidad
     FROM servicioreporte A
     INNER JOIN empleado B ON A.responsable_empleado_id = B.Id
-    INNER JOIN serviciotiporeporte C ON A.serviciotiporeporte_id = C.id 
-    WHERE A.fecha BETWEEN '2023-04-01' AND '2023-08-05'
-    AND B.Nombre LIKE 'Angel Israel'
-    AND C.clave LIKE 'M'
-    GROUP BY B.Nombre, C.clave
-    ORDER BY B.Nombre, C.clave`, (err,result)=>{
+    INNER JOIN servicioprioridad C ON A.prioridad = C.id
+    INNER JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
+    WHERE A.fecha BETWEEN ? AND ?
+    GROUP BY B.Nombre, D.clave, C.descripcion
+    ORDER BY B.Nombre, D.clave`, (err,result)=>{
             if (err) return res.send(err);
             res.send(result);
 
@@ -48,3 +49,4 @@ exports.getTabla = (req, res) => {
         });
     });
 };
+
