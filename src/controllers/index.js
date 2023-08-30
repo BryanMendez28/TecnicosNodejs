@@ -163,6 +163,8 @@ AND CONCAT(A.fecha, ' ', A.hora) + INTERVAL B.hrs HOUR > now()`
                                         if (err) return res.send(err);
 
 
+
+                                        
                         const combinedResults = {
                             hechosEnForma: hechosEnFormaResult,
                             hechosVencidos: hechosVencidosResult,
@@ -180,7 +182,7 @@ AND CONCAT(A.fecha, ' ', A.hora) + INTERVAL B.hrs HOUR > now()`
         }
         );
   
-        
+
             }
         );
     });
