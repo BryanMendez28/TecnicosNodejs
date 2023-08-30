@@ -179,7 +179,8 @@ AND CONCAT(A.fecha, ' ', A.hora) + INTERVAL B.hrs HOUR > now()`
 
         }
         );
-
+  
+        
             }
         );
     });
