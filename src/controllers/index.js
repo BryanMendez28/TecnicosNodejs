@@ -121,7 +121,7 @@ exports.getGrafica = (req, res) => {
         COUNT(*) AS cantidad_registros
          FROM servicioreporte A
         INNER JOIN servicioprioridad B ON A.prioridad = B.id
-        WHERE fecha BETWEEN '2023-05-31' AND '2023-08-03' AND
+        WHERE fecha BETWEEN ? AND ? AND
         activo = 1
         AND CONCAT(A.fecha, ' ', A.hora) + INTERVAL B.hrs HOUR < now() `;
  
@@ -132,7 +132,7 @@ SELECT
 COUNT(*) AS cantidad_registros
  FROM servicioreporte A
 INNER JOIN servicioprioridad B ON A.prioridad = B.id
-WHERE fecha BETWEEN '2023-05-31' AND '2023-08-03' AND
+WHERE fecha BETWEEN ? AND ? AND
 activo = 1
 AND CONCAT(A.fecha, ' ', A.hora) + INTERVAL B.hrs HOUR > now()`
 
@@ -164,7 +164,7 @@ AND CONCAT(A.fecha, ' ', A.hora) + INTERVAL B.hrs HOUR > now()`
 
 
 
-                                        
+
                         const combinedResults = {
                             hechosEnForma: hechosEnFormaResult,
                             hechosVencidos: hechosVencidosResult,
