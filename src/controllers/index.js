@@ -45,13 +45,13 @@ exports.getTotalPri = (req, res) => {
         B.Nombre,
         C.descripcion,
         D.clave,
+        C.hrs,
         COUNT(*) AS Cantidad
     FROM servicioreporte A
     INNER JOIN empleado B ON A.responsable_empleado_id = B.Id
     INNER JOIN servicioprioridad C ON A.prioridad = C.id
     INNER JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
     WHERE A.fecha BETWEEN ? AND ?
-     
     GROUP BY B.Nombre, D.clave, C.descripcion
     ORDER BY B.Nombre, D.clave`, [fechaInicio, fechaFin], (err, result) => {
             if (err) return res.send(err);
