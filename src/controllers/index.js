@@ -13,6 +13,7 @@ exports.getResultado = (req, res) => {
         B.Nombre,
         C.descripcion,
         D.clave,
+        C.hrs,
         COUNT(*) AS Cantidad
     FROM servicioreporte A
     INNER JOIN empleado B ON A.responsable_empleado_id = B.Id
