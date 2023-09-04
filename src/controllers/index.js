@@ -145,6 +145,8 @@ AND CONCAT(A.fecha, ' ', A.hora) + INTERVAL B.hrs HOUR > now()`
             (err, hechosEnFormaResult) => {
                 if (err) return res.send(err);
 
+
+                
                 conn.query(
                     hechosVencidos,
                     [fechaInicio, fechaFin],
