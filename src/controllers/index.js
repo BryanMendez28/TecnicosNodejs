@@ -19,7 +19,7 @@ exports.getResultado = (req, res) => {
     INNER JOIN empleado B ON A.responsable_empleado_id = B.Id
     INNER JOIN servicioprioridad C ON A.prioridad = C.id
     INNER JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
-    WHERE A.fecha BETWEEN ? AND ?
+    WHERE A.fecha_solucion BETWEEN ? AND ?
     AND B.Nombre LIKE ? 
 
     GROUP BY B.Nombre, D.clave, C.descripcion
@@ -52,7 +52,7 @@ exports.getTotalPri = (req, res) => {
     INNER JOIN empleado B ON A.responsable_empleado_id = B.Id
     INNER JOIN servicioprioridad C ON A.prioridad = C.id
     INNER JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
-    WHERE A.fecha BETWEEN ? AND ?
+    WHERE A.fecha_solucion BETWEEN ? AND ?
     GROUP BY B.Nombre, D.clave, C.descripcion
     ORDER BY B.Nombre, D.clave`, [fechaInicio, fechaFin], (err, result) => {
             if (err) return res.send(err);
@@ -79,7 +79,7 @@ exports.getTabla = (req, res) => {
             FROM servicioreporte A
             INNER JOIN empleado B ON A.responsable_empleado_id = B.Id
             INNER JOIN serviciotiporeporte C ON A.serviciotiporeporte_id = C.id 
-            WHERE A.fecha BETWEEN ? AND ?
+            WHERE A.fecha_solucion BETWEEN ? AND ?
             GROUP BY B.Nombre, C.clave
             ORDER BY B.Nombre, C.clave`, [fechaInicio, fechaFin], (err, result) => {
             if (err) return res.send(err);
