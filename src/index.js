@@ -13,7 +13,7 @@ const dbConfig = {
     port: process.env.DB_PORT || "3306",
     user: process.env.DB_USER || "development",
     password: process.env.DB_PASSWORD || "Daniel%2020",
-    database: process.env.DB_NAME || "cliente32",
+    database: process.env.DB_NAME || "cliente16",
 }
 
 app.use(cors()); // Configura las políticas de acceso CORS
