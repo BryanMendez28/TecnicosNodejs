@@ -15,9 +15,9 @@ exports.getResultado = (req, res) => {
         C.hrs,
         COUNT(*) AS Cantidad
     FROM servicioreporte A
-    INNER JOIN empleado B ON A.responsable_empleado_id = B.Id
-    INNER JOIN servicioprioridad C ON A.prioridad = C.id
-    INNER JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
+    LEFT JOIN empleado B ON A.responsable_empleado_id = B.Id
+    LEFT JOIN servicioprioridad C ON A.prioridad = C.id
+    LEFT JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
     WHERE A.fecha_solucion BETWEEN ? AND ?
     AND B.Nombre LIKE ? 
 
@@ -47,9 +47,9 @@ exports.getTotalPri = (req, res) => {
         C.hrs,
         COUNT(*) AS Cantidad
     FROM servicioreporte A
-    INNER JOIN empleado B ON A.responsable_empleado_id = B.Id
-    INNER JOIN servicioprioridad C ON A.prioridad = C.id
-    INNER JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
+    LEFT JOIN empleado B ON A.responsable_empleado_id = B.Id
+    LEFT JOIN servicioprioridad C ON A.prioridad = C.id
+    LEFT JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
     WHERE A.fecha_solucion BETWEEN ? AND ?
     GROUP BY B.Nombre, D.clave, C.descripcion
     ORDER BY B.Nombre, D.clave`, [fechaInicio, fechaFin], (err, result) => {
@@ -74,8 +74,8 @@ exports.getTabla = (req, res) => {
                 C.clave,
                 COUNT(*) AS Cantidad
             FROM servicioreporte A
-            INNER JOIN empleado B ON A.responsable_empleado_id = B.Id
-            INNER JOIN serviciotiporeporte C ON A.serviciotiporeporte_id = C.id 
+            LEFT JOIN empleado B ON A.responsable_empleado_id = B.Id
+            LEFT JOIN serviciotiporeporte C ON A.serviciotiporeporte_id = C.id 
             WHERE A.fecha_solucion BETWEEN ? AND ?
             GROUP BY B.Nombre, C.clave
             ORDER BY B.Nombre, C.clave`, [fechaInicio, fechaFin], (err, result) => {
@@ -95,9 +95,9 @@ exports.getGrafica = (req, res) => {
         SELECT 
             COUNT(*) AS Cantidad
         FROM servicioreporte A
-        INNER JOIN empleado B ON A.responsable_empleado_id = B.Id
-        INNER JOIN servicioprioridad C ON A.prioridad = C.id
-        INNER JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
+        LEFT JOIN empleado B ON A.responsable_empleado_id = B.Id
+        LEFT JOIN servicioprioridad C ON A.prioridad = C.id
+        LEFT JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
         WHERE A.fecha BETWEEN ? AND ?  AND
         CONCAT(A.fecha_solucion, ' ', A.horasolucion) <= CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs HOUR`;
 
@@ -105,9 +105,9 @@ exports.getGrafica = (req, res) => {
         SELECT 
             COUNT(*) AS Cantidad
         FROM servicioreporte A
-        INNER JOIN empleado B ON A.responsable_empleado_id = B.Id
-        INNER JOIN servicioprioridad C ON A.prioridad = C.id
-        INNER JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
+         LEFT JOIN empleado B ON A.responsable_empleado_id = B.Id
+        LEFT JOIN servicioprioridad C ON A.prioridad = C.id
+        LEFT JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
         WHERE A.fecha BETWEEN ? AND ?  AND
         CONCAT(A.fecha_solucion, ' ', A.horasolucion) >= CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs HOUR`;
 
@@ -148,7 +148,7 @@ exports.getGrafica = (req, res) => {
                     SELECT 
                     COUNT(*) AS cantidad_registros_por_vencer
                 FROM servicioreporte A
-                INNER JOIN servicioprioridad B ON A.prioridad = B.id
+                LEFT JOIN servicioprioridad B ON A.prioridad = B.id
                 WHERE activo = 1
                 AND (CONCAT(A.fecha, ' ', A.hora) + INTERVAL B.hrs / 2 HOUR) > NOW()
                 AND (CONCAT(A.fecha, ' ', A.hora) + INTERVAL B.hrs HOUR) > NOW();`;
@@ -157,7 +157,7 @@ exports.getGrafica = (req, res) => {
                     SELECT 
                     COUNT(*) AS cantidad_registros_por_vencer
                 FROM servicioreporte A
-                INNER JOIN servicioprioridad B ON A.prioridad = B.id
+                LEFT JOIN servicioprioridad B ON A.prioridad = B.id
                 WHERE activo = 1
                 AND (CONCAT(A.fecha, ' ', A.hora) + INTERVAL B.hrs / 2 HOUR) <= NOW()
                 AND (CONCAT(A.fecha, ' ', A.hora) + INTERVAL B.hrs HOUR) > NOW();`;
@@ -166,7 +166,7 @@ exports.getGrafica = (req, res) => {
                 SELECT 
                 COUNT(*) AS cantidad_registros
                          FROM servicioreporte A
-                        INNER JOIN servicioprioridad B ON A.prioridad = B.id
+                        LEFT JOIN servicioprioridad B ON A.prioridad = B.id
                         WHERE activo = 1
                         AND CONCAT(A.fecha, ' ', A.hora) + INTERVAL B.hrs HOUR < now() ;`;
 
