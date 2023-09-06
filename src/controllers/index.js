@@ -7,7 +7,6 @@ exports.getResultado = (req, res) => {
     req.getConnection((err, conn) => {
         if (err) return res.send(err);
 
-
         conn.query(`     
         SELECT 
         B.Nombre,
@@ -40,7 +39,6 @@ exports.getTotalPri = (req, res) => {
     req.getConnection((err, conn) => {
         if (err) return res.send(err);
 
-
         conn.query(`     
         SELECT 
         B.Nombre,
@@ -64,7 +62,6 @@ exports.getTotalPri = (req, res) => {
     )
 }
 
-
 exports.getTabla = (req, res) => {
     const { fechaInicio, fechaFin } = req.query;
 
@@ -87,7 +84,6 @@ exports.getTabla = (req, res) => {
         });
     });
 };
-
 
 exports.getGrafica = (req, res) => {
     const { fechaInicio, fechaFin } = req.query;
@@ -115,65 +111,22 @@ exports.getGrafica = (req, res) => {
         WHERE A.fecha BETWEEN ? AND ?  AND
         CONCAT(A.fecha_solucion, ' ', A.horasolucion) >= CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs HOUR`;
 
-
-        const pendientesVencidos = `
-        SELECT 
-
-        COUNT(*) AS cantidad_registros
-         FROM servicioreporte A
-        INNER JOIN servicioprioridad B ON A.prioridad = B.id
-        WHERE fecha BETWEEN ? AND ? AND
-        activo = 1
-        AND CONCAT(A.fecha, ' ', A.hora) + INTERVAL B.hrs HOUR < now() `;
- 
-
-const pendientesNoVencidos = `
-SELECT 
-
-COUNT(*) AS cantidad_registros
- FROM servicioreporte A
-INNER JOIN servicioprioridad B ON A.prioridad = B.id
-WHERE fecha BETWEEN ? AND ? AND
-activo = 1
-AND CONCAT(A.fecha, ' ', A.hora) + INTERVAL B.hrs HOUR > now()`
-
-
-
         conn.query(
             hechosEnForma,
             [fechaInicio, fechaFin],
             (err, hechosEnFormaResult) => {
                 if (err) return res.send(err);
 
-
-                
                 conn.query(
                     hechosVencidos,
                     [fechaInicio, fechaFin],
                     (err, hechosVencidosResult) => {
                         if (err) return res.send(err);
 
-                        conn.query(
-                            pendientesVencidos,
-                            [fechaInicio, fechaFin],
-                            (err, pendientesVencidosResult) => {
-                                if (err) return res.send(err);
-
-                                conn.query(
-                                    pendientesNoVencidos,
-                                    [fechaInicio, fechaFin],
-                                    (err, pendientesNoVencidosResult) => {
-                                        if (err) return res.send(err);
-
-
-
-
                         const combinedResults = {
                             hechosEnForma: hechosEnFormaResult,
                             hechosVencidos: hechosVencidosResult,
-                            pendientesVencidos:pendientesVencidosResult,
-                            pendientesNoVencidos:pendientesNoVencidosResult
-
+                           
                         };
 
                         res.send(combinedResults);
@@ -181,13 +134,71 @@ AND CONCAT(A.fecha, ' ', A.hora) + INTERVAL B.hrs HOUR > now()`
                 );
             }
             );
-
         }
         );
-  
-
             }
-        );
-    });
-};
+ 
+            exports.getGraficaPastel = (req, res) => {
+               
+            
+                req.getConnection((err, conn) => {
+                    if (err) return res.send(err);
+            
+                    const porVencer = `
+                    SELECT 
+                    COUNT(*) AS cantidad_registros_por_vencer
+                FROM servicioreporte A
+                INNER JOIN servicioprioridad B ON A.prioridad = B.id
+                WHERE activo = 1
+                AND (CONCAT(A.fecha, ' ', A.hora) + INTERVAL B.hrs / 2 HOUR) > NOW()
+                AND (CONCAT(A.fecha, ' ', A.hora) + INTERVAL B.hrs HOUR) > NOW();`;
+            
+                    const aTiempo = `
+                    SELECT 
+                    COUNT(*) AS cantidad_registros_por_vencer
+                FROM servicioreporte A
+                INNER JOIN servicioprioridad B ON A.prioridad = B.id
+                WHERE activo = 1
+                AND (CONCAT(A.fecha, ' ', A.hora) + INTERVAL B.hrs / 2 HOUR) <= NOW()
+                AND (CONCAT(A.fecha, ' ', A.hora) + INTERVAL B.hrs HOUR) > NOW();`;
 
+                const vencido = `
+                SELECT 
+                COUNT(*) AS cantidad_registros
+                         FROM servicioreporte A
+                        INNER JOIN servicioprioridad B ON A.prioridad = B.id
+                        WHERE activo = 1
+                        AND CONCAT(A.fecha, ' ', A.hora) + INTERVAL B.hrs HOUR < now() ;`;
+
+                    conn.query(
+                        porVencer,
+                        
+                        (err, porVencerResult) => {
+                            if (err) return res.send(err);
+            
+                            conn.query(
+                                aTiempo,
+                               
+                                (err, aTiempoResult) => {
+                                    if (err) return res.send(err);
+
+                                    conn.query(
+                                        vencido,
+                                       
+                                        (err, vencidoResult) => {
+                                            if (err) return res.send(err);
+            
+                                    const combinedResults = {
+                                        porVencer: porVencerResult,
+                                        aTiempo: aTiempoResult,
+                                        vencido: vencidoResult
+                                    };
+                                    res.send(combinedResults);
+                                }
+                            );
+                        }
+                        );
+                    }
+                    );
+                })
+                        }
