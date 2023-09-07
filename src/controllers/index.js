@@ -19,6 +19,8 @@ exports.getResultado = (req, res) => {
     LEFT JOIN servicioprioridad C ON A.prioridad = C.id
     LEFT JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
     WHERE A.fecha_solucion BETWEEN ? AND ?
+    AND
+ D.clave IS NOT NULL
     AND B.Nombre LIKE ? 
 
     GROUP BY B.Nombre, D.clave, C.descripcion
@@ -51,6 +53,8 @@ exports.getTotalPri = (req, res) => {
     LEFT JOIN servicioprioridad C ON A.prioridad = C.id
     LEFT JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
     WHERE A.fecha_solucion BETWEEN ? AND ?
+    AND
+    D.clave IS NOT NULL
     GROUP BY B.Nombre, D.clave, C.descripcion
     ORDER BY B.Nombre, D.clave`, [fechaInicio, fechaFin], (err, result) => {
             if (err) return res.send(err);
@@ -77,6 +81,8 @@ exports.getTabla = (req, res) => {
             LEFT JOIN empleado B ON A.responsable_empleado_id = B.Id
             LEFT JOIN serviciotiporeporte C ON A.serviciotiporeporte_id = C.id 
             WHERE A.fecha_solucion BETWEEN ? AND ?
+            AND
+            C.clave IS NOT NULL
             GROUP BY B.Nombre, C.clave
             ORDER BY B.Nombre, C.clave`, [fechaInicio, fechaFin], (err, result) => {
             if (err) return res.send(err);
