@@ -98,7 +98,7 @@ exports.getGrafica = (req, res) => {
         LEFT JOIN empleado B ON A.responsable_empleado_id = B.Id
         LEFT JOIN servicioprioridad C ON A.prioridad = C.id
         LEFT JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
-        WHERE A.fecha BETWEEN ? AND ?  AND
+        WHERE A.fecha_solucion BETWEEN ? AND ?  AND
         CONCAT(A.fecha_solucion, ' ', A.horasolucion) <= CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs HOUR`;
 
         const hechosVencidos = `
@@ -108,7 +108,7 @@ exports.getGrafica = (req, res) => {
          LEFT JOIN empleado B ON A.responsable_empleado_id = B.Id
         LEFT JOIN servicioprioridad C ON A.prioridad = C.id
         LEFT JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
-        WHERE A.fecha BETWEEN ? AND ?  AND
+        WHERE A.fecha_solucion BETWEEN ? AND ?  AND
         CONCAT(A.fecha_solucion, ' ', A.horasolucion) >= CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs HOUR`;
 
         conn.query(
