@@ -21,6 +21,7 @@ exports.getResultado = (req, res) => {
     WHERE A.fecha_solucion BETWEEN ? AND ?
     AND
  D.clave IS NOT NULL
+ AND B.Nombre IS NOT NULL
     AND B.Nombre LIKE ? 
 
     GROUP BY B.Nombre, D.clave, C.descripcion
@@ -55,6 +56,7 @@ exports.getTotalPri = (req, res) => {
     WHERE A.fecha_solucion BETWEEN ? AND ?
     AND
     D.clave IS NOT NULL
+    AND B.Nombre IS NOT NULL
     GROUP BY B.Nombre, D.clave, C.descripcion
     ORDER BY B.Nombre, D.clave`, [fechaInicio, fechaFin], (err, result) => {
             if (err) return res.send(err);
@@ -83,6 +85,7 @@ exports.getTabla = (req, res) => {
             WHERE A.fecha_solucion BETWEEN ? AND ?
             AND
             C.clave IS NOT NULL
+            AND B.Nombre IS NOT NULL
             GROUP BY B.Nombre, C.clave
             ORDER BY B.Nombre, C.clave`, [fechaInicio, fechaFin], (err, result) => {
             if (err) return res.send(err);
@@ -106,6 +109,7 @@ exports.getGrafica = (req, res) => {
         LEFT JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
         WHERE A.fecha_solucion BETWEEN ? AND ?  AND
         D.clave IS NOT NULL AND
+        AND B.Nombre IS NOT NULL
         CONCAT(A.fecha_solucion, ' ', A.horasolucion) <= CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs HOUR`;
 
         const hechosVencidos = `
@@ -117,6 +121,7 @@ exports.getGrafica = (req, res) => {
         LEFT JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
         WHERE A.fecha_solucion BETWEEN ? AND ?  AND
         D.clave IS NOT NULL AND
+        AND B.Nombre IS NOT NULL
         CONCAT(A.fecha_solucion, ' ', A.horasolucion) >= CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs HOUR`;
 
         conn.query(
@@ -161,6 +166,7 @@ FROM servicioreporte A
         LEFT JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
 WHERE A.activo = 1 AND
  D.clave IS NOT NULL
+ AND B.Nombre IS NOT NULL
 AND (CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs / 2 HOUR) > NOW()
 AND (CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs HOUR) > NOW();`;
             
@@ -173,6 +179,7 @@ FROM servicioreporte A
         LEFT JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
 WHERE A.activo = 1 AND
  D.clave IS NOT NULL
+ AND B.Nombre IS NOT NULL
 AND (CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs / 2 HOUR) <= NOW()
 AND (CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs HOUR) > NOW();`;
 
@@ -185,6 +192,7 @@ AND (CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs HOUR) > NOW();`;
                     LEFT JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
             WHERE A.activo = 1 AND
              D.clave IS NOT NULL
+             AND B.Nombre IS NOT NULL
                     AND CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs HOUR < now() ;`;
 
                     conn.query(
