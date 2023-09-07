@@ -109,7 +109,7 @@ exports.getGrafica = (req, res) => {
         LEFT JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
         WHERE A.fecha_solucion BETWEEN ? AND ?  AND
         D.clave IS NOT NULL AND
-         B.Nombre IS NOT NULL
+         B.Nombre IS NOT NULL AND
         CONCAT(A.fecha_solucion, ' ', A.horasolucion) <= CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs HOUR`;
 
         const hechosVencidos = `
@@ -121,7 +121,7 @@ exports.getGrafica = (req, res) => {
         LEFT JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
         WHERE A.fecha_solucion BETWEEN ? AND ?  AND
         D.clave IS NOT NULL AND
-         B.Nombre IS NOT NULL
+         B.Nombre IS NOT NULL AND
         CONCAT(A.fecha_solucion, ' ', A.horasolucion) >= CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs HOUR`;
 
         conn.query(
