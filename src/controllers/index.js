@@ -166,7 +166,7 @@ FROM servicioreporte A
         LEFT JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
 WHERE A.activo = 1 AND
  D.clave IS NOT NULL
- AND B.Nombre IS NOT NULL
+
 AND (CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs / 2 HOUR) > NOW()
 AND (CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs HOUR) > NOW();`;
             
@@ -179,7 +179,7 @@ FROM servicioreporte A
         LEFT JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
 WHERE A.activo = 1 AND
  D.clave IS NOT NULL
- AND B.Nombre IS NOT NULL
+
 AND (CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs / 2 HOUR) <= NOW()
 AND (CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs HOUR) > NOW();`;
 
@@ -192,7 +192,7 @@ AND (CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs HOUR) > NOW();`;
                     LEFT JOIN serviciotiporeporte D ON A.serviciotiporeporte_id = D.id 
             WHERE A.activo = 1 AND
              D.clave IS NOT NULL
-             AND B.Nombre IS NOT NULL
+            
                     AND CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs HOUR < now() ;`;
 
                     conn.query(
