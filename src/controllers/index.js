@@ -207,6 +207,7 @@ AND (CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs HOUR) > NOW();`;
                                 (err, aTiempoResult) => {
                                     if (err) return res.send(err);
 
+                                    
                                     conn.query(
                                         vencido,
                                        
