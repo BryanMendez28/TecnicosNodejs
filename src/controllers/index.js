@@ -213,10 +213,11 @@ AND (CONCAT(A.fecha, ' ', A.hora) + INTERVAL C.hrs HOUR) > NOW();`;
                                        
 
                                         
+                                        
                                         (err, vencidoResult) => {
                                             if (err) return res.send(err);
             
-                                            
+
                                     const combinedResults = {
                                         porVencer: porVencerResult,
                                         aTiempo: aTiempoResult,
